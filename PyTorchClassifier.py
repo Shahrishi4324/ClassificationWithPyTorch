@@ -64,3 +64,26 @@ net = Net()
 # Define a loss function and optimizer
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+
+# Training the model
+for epoch in range(2):  # Loop over the dataset multiple times
+    running_loss = 0.0
+    for i, data in enumerate(trainloader, 0):
+        inputs, labels = data
+        optimizer.zero_grad()
+
+        outputs = net(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.item()
+        if i % 2000 == 1999:    # Print every 2000 mini-batches
+            print(f'Epoch {epoch + 1}, Batch {i + 1}, Loss: {running_loss / 2000:.3f}')
+            running_loss = 0.0
+
+print('Finished Training')
+
+# Save the trained model
+PATH = './cifar_net.pth'
+torch.save(net.state_dict(), PATH)
