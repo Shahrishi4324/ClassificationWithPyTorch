@@ -18,4 +18,7 @@ You can install the required packages using:
 pip install torch torchvision numpy matplotlib
 ```
 
-Clone the repository and then run the PyTorchClassifier. 
+Clone the repository and then run the PyTorchClassifier with 
+```bash
+python PyTorchClassifier.py
+```
