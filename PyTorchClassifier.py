@@ -87,3 +87,37 @@ print('Finished Training')
 # Save the trained model
 PATH = './cifar_net.pth'
 torch.save(net.state_dict(), PATH)
+
+# Load the trained model
+net = Net()
+net.load_state_dict(torch.load(PATH))
+
+# Evaluate on the test dataset
+correct = 0
+total = 0
+with torch.no_grad():
+    for data in testloader:
+        images, labels = data
+        outputs = net(images)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+print(f'Accuracy on the test set: {100 * correct // total}%')
+
+import numpy as np
+
+# Function to visualize predictions
+def visualize_predictions(images, labels, predictions):
+    imshow(torchvision.utils.make_grid(images))
+    print('Ground Truth: ', ' '.join(f'{classes[labels[j]]:5s}' for j in range(4)))
+    print('Predicted:    ', ' '.join(f'{classes[predictions[j]]:5s}' for j in range(4)))
+
+# Get a batch of test data
+dataiter = iter(testloader)
+images, labels = next(dataiter)
+outputs = net(images)
+_, predicted = torch.max(outputs.data, 1)
+
+# Visualize the predictions
+visualize_predictions(images, labels, predicted)
